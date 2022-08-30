@@ -22,11 +22,12 @@ class HttpLogger
 
     public function handle(Request $request, Closure $next)
     {
+        $hash = md5(strtotime('now'));
         $response = $next($request);
         if ($this->logProfile->shouldLogRequest($request)) {
-            $this->logWriter->logRequest($request);
+            $this->logWriter->logRequest($request, $hash);
 
-            Log::channel(config('http-logger.log_channel'))->log(config('http-logger.log_level', 'info'), "Response : " . json_encode($response));
+            Log::channel(config('http-logger.log_channel'))->log(config('http-logger.log_level', 'info'), "Response [${$hash}]: " . json_encode($response));
         }
 
         return $response;
