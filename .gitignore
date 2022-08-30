@@ -4,4 +4,4 @@ docs
 vendor
 tests/temp
 .php-cs-fixer.cache
-
+.idea

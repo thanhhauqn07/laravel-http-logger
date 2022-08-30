@@ -6,6 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Spatie\HttpLogger\LogProfile;
 use Spatie\HttpLogger\LogWriter;
+use Illuminate\Support\Facades\Log;
 
 class HttpLogger
 {
@@ -21,10 +22,13 @@ class HttpLogger
 
     public function handle(Request $request, Closure $next)
     {
+        $response = $next($request);
         if ($this->logProfile->shouldLogRequest($request)) {
             $this->logWriter->logRequest($request);
+
+            Log::channel(config('http-logger.log_channel'))->log(config('http-logger.log_level', 'info'), "Response : " . json_encode($response));
         }
 
-        return $next($request);
+        return $response;
     }
 }
