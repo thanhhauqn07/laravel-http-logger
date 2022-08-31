@@ -20,7 +20,7 @@ class HttpLogger
     {
         $this->logProfile = $logProfile;
         $this->logWriter = $logWriter;
-        $this->hash = md5(env('APP_NAME', '') .'-'. strtotime('now'));
+        $this->hash = md5(env('APP_NAME', '') .'-'. microtime(true) .'-'. rand(100,999));
     }
 
     public function getHash()
