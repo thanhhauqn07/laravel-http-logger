@@ -3,15 +3,20 @@
 namespace Spatie\HttpLogger;
 
 use Illuminate\Support\ServiceProvider;
+use Laravel\Lumen\Application as LumenApplication;
 
 class HttpLoggerServiceProvider extends ServiceProvider
 {
     public function boot()
     {
         if ($this->app->runningInConsole()) {
-            $this->publishes([
-                __DIR__.'/../config/http-logger.php' => config_path('http-logger.php'),
-            ], 'config');
+            if ($this->app instanceof LumenApplication) {
+                $this->app->configure('http-logger');
+            } else {
+                $this->publishes([
+                    __DIR__.'/../config/http-logger.php' => config_path('http-logger.php'),
+                ], 'config');
+            }
         }
 
         $this->app->singleton(LogProfile::class, config('http-logger.log_profile'));
