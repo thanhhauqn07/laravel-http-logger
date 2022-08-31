@@ -7,4 +7,6 @@ use Illuminate\Http\Request;
 interface LogWriter
 {
     public function logRequest(Request $request, $hash);
+
+    public function getHash();
 }
